@@ -2,8 +2,8 @@ window.KEDAO_CONFIG = {
   // Leave empty when the frontend is served by the same Python backend.
   // For GitHub Pages, set this to your deployed backend, or use the site's "连接设置".
   apiBase: "",
-  defaultApi: "https://kedao-api.onrender.com",
+  defaultApi: "",
 
-  desktopUrl: "https://github.com/OWNER/kedao/releases/latest",
-  repoUrl: "https://github.com/OWNER/kedao",
+  desktopUrl: "https://github.com/kedao866/kedao/releases/latest",
+  repoUrl: "https://github.com/kedao866/kedao",
 };
