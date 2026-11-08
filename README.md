@@ -98,7 +98,7 @@ git push -u origin main
 
 ### 2b. 部署后端（Hugging Face Space，可选，需 PRO）
 
-Hugging Face 现在只对 PRO 账户开放免费的 Docker / Gradio Space（静态 Space 仍免费），免费账户创建时会返回 `402 Payment Required`。如果已有 PRO，项目里已经准备好上传包 `hf-space/`（Dockerfile、README、backend、frontend）：
+Hugging Face 的 Docker / Gradio Space 免费额度现在只对 PRO 账户开放（静态 Space 仍免费），普通账户创建时会返回 `402 Payment Required`。如果已有 PRO，项目里已经准备好上传包 `hf-space/`（Dockerfile、README、backend、frontend）：
 
 1. 打开 https://huggingface.co/new-space ，SDK 选 **Docker → Blank**，Hardware 选 **CPU basic**，可见性选 **Public**，名称填 `kedao-api`。
 2. 进入 Space 的 **Files** 页，上传 `hf-space/` 里的 `Dockerfile`、`README.md`、`backend/`、`frontend/`，提交后自动构建。
