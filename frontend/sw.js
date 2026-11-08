@@ -1,4 +1,4 @@
-const CACHE = "kedao-shell-v3";
+const CACHE = "kedao-shell-v4";
 const SHELL = [
   "./",
   "./index.html",

@@ -136,21 +136,32 @@
     state.api = cleanBase(CFG.defaultApi);
   }
 
+  async function ping() {
+    const response = await fetch(apiUrl("/api/health"), {
+      cache: "no-store",
+      signal: AbortSignal.timeout(20000),
+    });
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    const data = await response.json();
+    if (!data.ok) throw new Error("not ok");
+  }
+
   async function checkHealth() {
-    try {
-      const response = await fetch(apiUrl("/api/health"), {
-        cache: "no-store",
-        signal: AbortSignal.timeout(6000),
-      });
-      if (!response.ok) throw new Error(`HTTP ${response.status}`);
-      const data = await response.json();
-      if (!data.ok) throw new Error("not ok");
-      showOffline(false);
-      return true;
-    } catch (error) {
-      showOffline(true);
-      return false;
+    for (let attempt = 0; attempt < 3; attempt += 1) {
+      try {
+        await ping();
+        showOffline(false);
+        setStatus("");
+        return true;
+      } catch (error) {
+        if (attempt === 2) break;
+        setStatus("正在唤醒在线服务，请稍候…");
+        await new Promise((resolve) => setTimeout(resolve, attempt === 0 ? 2000 : 6000));
+      }
     }
+    setStatus("");
+    showOffline(true);
+    return false;
   }
 
   function setBusy(busy) {
@@ -233,9 +244,15 @@
       return;
     }
     if (state.offline) {
-      setStatus("在线解析服务未连接，请先看页脚的“连接设置”。", "error");
-      showOffline(true);
-      return;
+      setBusy(true);
+      setStatus("正在唤醒在线服务，请稍候…");
+      const alive = await checkHealth();
+      setBusy(false);
+      if (!alive) {
+        setStatus("在线解析服务未连接，请稍后再试，或在页脚填入自己的后端地址。", "error");
+        return;
+      }
+      setStatus("服务已连接，正在解析…");
     }
     setBusy(true);
     setStatus("正在解析，请稍候…");

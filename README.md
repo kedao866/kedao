@@ -2,7 +2,7 @@
 
 在线视频提取工具。粘贴 B站 / YouTube / 小红书 / 抖音等链接，解析标题和清晰度，直接保存到手机或电脑。附带一个免安装的 Windows 桌面版。
 
-- 在线版：GitHub Pages（页面）+ Render（解析与下载后端）
+- 在线版：GitHub Pages（页面）+ Render 或 Hugging Face Space（解析与下载后端）
 - 桌面版：单文件 `kedao.exe`，绿色免安装，通过 GitHub Release 分发
 
 ## 在线地址
@@ -49,6 +49,7 @@ kedao-web/
 │  ├─ engine_web.py       yt-dlp 封装
 │  ├─ requirements.txt
 │  └─ Dockerfile
+├─ hf-space/              Hugging Face Space 上传包（Dockerfile + backend/frontend 副本）
 ├─ render.yaml            Render Blueprint（免费 Docker 服务）
 └─ .github/workflows/pages.yml
 ```
@@ -92,6 +93,30 @@ git push -u origin main
 5. 复制服务地址，例如 `https://kedao-api-xxxx.onrender.com`。
 
 免费实例 15 分钟无请求会休眠，下一次访问需要约 30–60 秒唤醒；页面已经有相应提示。
+
+### 2b. 部署后端（Hugging Face Space，免费、无需信用卡）
+
+Hugging Face 的免费 Docker Space 提供 2 vCPU / 16GB 内存，适合这个后端。项目里已经准备好独立上传包 `hf-space/`（Dockerfile、README、backend、frontend）。
+
+1. 注册并登录 https://huggingface.co 。
+2. 打开 https://huggingface.co/new-space ：
+   - Space name 填 `kedao-api`
+   - SDK 选 **Docker** → **Blank**
+   - Hardware 选 **CPU basic · FREE**
+   - 可见性选 **Public**
+3. 进入 Space 的 **Files** 页，把 `hf-space/` 里的 `Dockerfile`、`README.md`、`backend/`、`frontend/` 上传（拖拽文件夹即可），提交后自动构建，约 3–8 分钟。
+4. 构建完成后，Space 页面上的 **App** 就是后端地址，形如：
+
+   ```
+   https://<你的HF用户名>-kedao-api.hf.space
+   ```
+
+   访问 `https://<你的HF用户名>-kedao-api.hf.space/api/health`，应返回 `"ok": true`。
+5. 打开 `https://kedao866.github.io/kedao/?api=https://<你的HF用户名>-kedao-api.hf.space`，页面会记住这个地址。
+
+Space 空闲约 48 小时后休眠，首次访问需要唤醒；免费磁盘是临时的，重启后任务文件会清空。
+
+更新后端代码时，先在本机运行 `hf-space/sync.sh` 同步 `backend/`、`frontend/`，再把改动上传到 Space 并点 **Factory rebuild**。
 
 ### 3. 发布前端（GitHub Pages）
 
