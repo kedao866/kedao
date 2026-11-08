@@ -1,0 +1,30 @@
+services:
+  - type: web
+    name: kedao-api
+    runtime: docker
+    plan: free
+    dockerfilePath: ./backend/Dockerfile
+    dockerContext: .
+    healthCheckPath: /api/health
+    autoDeploy: true
+    envVars:
+      - key: ALLOWED_ORIGINS
+        value: "*"
+      - key: TRUST_PROXY
+        value: "1"
+      - key: WORK_DIR
+        value: /tmp/kedao
+      - key: MAX_FILESIZE_MB
+        value: "300"
+      - key: MAX_DURATION_MIN
+        value: "90"
+      - key: MAX_ACTIVE_DOWNLOADS
+        value: "2"
+      - key: JOB_TTL_MIN
+        value: "60"
+      - key: PROBE_LIMIT
+        value: "30"
+      - key: DOWNLOAD_LIMIT
+        value: "6"
+      - key: RATE_WINDOW_MIN
+        value: "10"

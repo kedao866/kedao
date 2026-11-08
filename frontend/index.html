@@ -1,0 +1,266 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#f3ebdd">
+  <meta name="description" content="kedao 在线视频提取：粘贴 B站、YouTube、小红书、抖音链接，选择清晰度，直接保存到手机或电脑。">
+  <title>kedao · 把视频轻轻取下来</title>
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="icon" href="./assets/app.ico" sizes="any">
+  <link rel="apple-touch-icon" href="./assets/apple-touch-icon.png">
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <div class="paper-grain" aria-hidden="true"></div>
+
+  <header class="topbar">
+    <a class="brand" href="./" aria-label="kedao 首页">
+      <img src="./assets/app.png" alt="" width="40" height="40">
+      <span>kedao</span>
+    </a>
+    <nav class="nav" aria-label="主导航">
+      <a href="#app">在线提取</a>
+      <a href="#how">怎么用</a>
+      <a href="#sites">支持平台</a>
+      <a href="#desktop">桌面版</a>
+    </nav>
+    <a class="btn btn-small btn-primary" href="#app">开始提取</a>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="hero-copy">
+        <p class="eyebrow"><span class="dot"></span>在线视频提取 · 手机也能用</p>
+        <h1>把视频，<br><em>轻轻取下来。</em></h1>
+        <p class="lede">粘贴 B站、YouTube、小红书、抖音的链接，kedao 解析出画面与声音，选好清晰度，直接保存到你的设备。</p>
+        <div class="hero-actions">
+          <a class="btn btn-primary btn-big" href="#app">
+            在线提取
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+          <a class="btn btn-ghost btn-big" id="desktop-hero" href="#desktop">下载 Windows 版</a>
+        </div>
+        <ul class="mini-stats">
+          <li><strong>1000+</strong><span>支持站点</span></li>
+          <li><strong>1080P</strong><span>最高画质</span></li>
+          <li><strong>MP3</strong><span>单独提取</span></li>
+        </ul>
+      </div>
+
+      <div class="hero-art" aria-hidden="true">
+        <div class="arch">
+          <img src="./assets/app.png" alt="" width="1024" height="1024" fetchpriority="high">
+        </div>
+        <span class="sticker sticker-a">1080P</span>
+        <span class="sticker sticker-b">MP3</span>
+        <span class="sticker sticker-c">免安装</span>
+        <div class="hero-note">
+          <span>解析</span><i></i><span>选清晰度</span><i></i><span>保存</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="app">
+      <div class="section-head">
+        <p class="section-no">01 / 在线提取</p>
+        <h2>一个链接，三步拿走。</h2>
+        <p>整段分享文案也可以，kedao 会自动找出里面的链接。</p>
+      </div>
+
+      <div class="extractor card">
+        <form id="probe-form" autocomplete="off">
+          <label for="url">视频链接</label>
+          <div class="input-row">
+            <input id="url" name="url" type="text" inputmode="url" spellcheck="false"
+                   placeholder="粘贴 B站 / YouTube / 小红书 / 抖音 链接…" aria-describedby="url-hint">
+            <button class="btn btn-small btn-ghost paste" type="button" id="paste-btn" title="从剪贴板粘贴">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5h6M9 5a3 3 0 0 0-3 3v11a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V8a3 3 0 0 0-3-3M9 5a3 3 0 0 1 3-3 3 3 0 0 1 3 3"/></svg>
+              粘贴
+            </button>
+            <button class="btn btn-primary probe-btn" type="submit" id="probe-btn">
+              解析
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </button>
+          </div>
+          <p class="hint" id="url-hint">支持 http/https 链接；不支持直播、会员专享和需要登录的内容。</p>
+        </form>
+
+        <div class="status" id="status" role="status" aria-live="polite" hidden></div>
+
+        <div class="offline-note" id="offline-note" hidden>
+          <strong>在线解析服务还没连接。</strong>
+          <span>免费后端首次访问需要唤醒，请稍等半分钟再试；也可以填入自己的后端地址。</span>
+          <button type="button" class="btn btn-small btn-primary" id="offline-settings">填入后端地址</button>
+        </div>
+
+        <div class="result" id="result" hidden>
+          <div class="media">
+            <div class="thumb-wrap">
+              <img id="thumb" alt="" referrerpolicy="no-referrer" loading="lazy">
+              <span class="duration" id="duration"></span>
+            </div>
+            <div class="media-meta">
+              <p class="site-badge"><span id="site"></span></p>
+              <h3 id="title">视频标题</h3>
+              <p class="uploader" id="uploader"></p>
+            </div>
+          </div>
+
+          <div class="quality-block">
+            <p class="quality-label">选择清晰度</p>
+            <div class="quality" id="quality" role="radiogroup" aria-label="清晰度"></div>
+          </div>
+
+          <div class="download-row">
+            <button class="btn btn-primary btn-wide" type="button" id="download-btn">
+              下载到设备
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg>
+            </button>
+            <button class="btn btn-ghost" type="button" id="cancel-btn" hidden>取消</button>
+          </div>
+
+          <div class="progress" id="progress" hidden>
+            <div class="bar"><span id="bar-fill"></span></div>
+            <div class="progress-meta">
+              <span id="stage">准备中…</span>
+              <span id="pct">0%</span>
+            </div>
+          </div>
+
+          <div class="save-row" id="save-row" hidden>
+            <a class="btn btn-primary btn-wide" id="save-link" href="#" rel="noopener">保存文件</a>
+            <p class="file-note" id="file-note"></p>
+          </div>
+
+          <p class="ttl-note">文件只在服务器保留 60 分钟，下载完成后请及时保存。</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="how">
+      <div class="section-head">
+        <p class="section-no">02 / 怎么用</p>
+        <h2>不用教程，看一遍就会。</h2>
+      </div>
+      <div class="steps">
+        <article class="step card">
+          <span class="step-no">01</span>
+          <h3>粘贴链接</h3>
+          <p>从 App 里复制整段分享文案，直接粘进来。B站、YouTube、小红书、抖音都可以。</p>
+        </article>
+        <article class="step card">
+          <span class="step-no">02</span>
+          <h3>选清晰度</h3>
+          <p>1080P、720P、480P，或者只要声音。解析后先看封面和标题，再决定。</p>
+        </article>
+        <article class="step card">
+          <span class="step-no">03</span>
+          <h3>保存到设备</h3>
+          <p>手机浏览器会直接下载到“文件”；电脑会进入下载文件夹。大文件建议连 Wi-Fi。</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section" id="sites">
+      <div class="section-head">
+        <p class="section-no">03 / 支持平台</p>
+        <h2>你常看的，基本都在。</h2>
+        <p>基于 yt-dlp，支持 1000+ 个视频站点；下面是常用的几个。</p>
+      </div>
+      <ul class="site-chips">
+        <li>哔哩哔哩</li><li>YouTube</li><li>小红书</li><li>抖音</li>
+        <li>X / Twitter</li><li>TikTok</li><li>Instagram</li><li>Vimeo</li>
+        <li>微博</li><li>niconico</li><li class="more">+1000 更多</li>
+      </ul>
+    </section>
+
+    <section class="section" id="desktop">
+      <div class="desktop-card">
+        <div class="desktop-art">
+          <img src="./assets/app.png" alt="kedao 桌面版图标" width="140" height="140">
+        </div>
+        <div class="desktop-copy">
+          <p class="section-no light">04 / 桌面版</p>
+          <h2>想要 Cookie、批量和更高画质？</h2>
+          <p>Windows 桌面版继续使用本机浏览器 Cookie，支持批量链接、4K 与 MP3，绿色单文件，不用安装。</p>
+          <div class="desktop-actions">
+            <a class="btn btn-primary btn-big" id="desktop-download" href="#" rel="noopener">
+              下载 Windows 版
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg>
+            </a>
+            <a class="btn btn-outline-light btn-big" id="repo-link" href="#" rel="noopener">GitHub 仓库</a>
+          </div>
+          <p class="desktop-meta">绿色单文件 · 约 70MB · 无需安装</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section faq" id="faq">
+      <div class="section-head">
+        <p class="section-no">05 / 说明</p>
+        <h2>先把丑话说在前面。</h2>
+      </div>
+      <div class="faq-grid">
+        <details>
+          <summary>为什么 YouTube 有时提示要登录？</summary>
+          <p>云端服务器的 IP 容易被 YouTube 要求人机验证，而网页无法读取你电脑上的 Cookie。遇到这种情况，请用 Windows 桌面版提取。</p>
+        </details>
+        <details>
+          <summary>在线版能下 4K 吗？</summary>
+          <p>在线版默认最高 1080P，并限制单文件 300MB、时长 90 分钟，避免免费服务器被大文件拖垮。4K 请用桌面版。</p>
+        </details>
+        <details>
+          <summary>文件会一直保存吗？</summary>
+          <p>不会。任务完成 60 分钟后，服务器会自动删除文件。请下载完成后立刻保存到本地。</p>
+        </details>
+        <details>
+          <summary>手机上怎么找到下载的文件？</summary>
+          <p>Android 一般在“文件/Downloads”，iPhone 在“文件”App 的“下载”里。若浏览器只预览不下载，长按视频选择“存储到文件”。</p>
+        </details>
+        <details>
+          <summary>可以商用或搬运吗？</summary>
+          <p>kedao 只提供工具。请只下载你有权保存的内容，遵守各平台条款与版权规定；不要用于搬运、售卖或侵犯他人权利。</p>
+        </details>
+        <details>
+          <summary>为什么第一次打开很慢？</summary>
+          <p>免费后端会休眠，第一次请求需要叫醒，通常等 30–60 秒。之后再解析就快了。</p>
+        </details>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-brand">
+      <img src="./assets/app.png" alt="" width="34" height="34">
+      <div>
+        <strong>kedao</strong>
+        <span>把视频，轻轻取下来。</span>
+      </div>
+    </div>
+    <div class="footer-links">
+      <a id="footer-repo" href="#" rel="noopener">GitHub</a>
+      <a id="footer-desktop" href="#desktop">桌面版</a>
+      <button type="button" class="link-btn" id="api-settings">连接设置</button>
+      <span>© <span id="year">2026</span> kedao</span>
+    </div>
+  </footer>
+
+  <dialog id="api-dialog" class="api-dialog">
+    <form method="dialog" id="api-form">
+      <h2>连接在线解析服务</h2>
+      <p>如果你把后端部署在 Render / Railway，把它的地址填在这里。留空则使用当前站点同源接口。</p>
+      <label for="api-input">后端地址</label>
+      <input id="api-input" type="url" placeholder="https://kedao-api.onrender.com" spellcheck="false">
+      <p class="dialog-hint" id="dialog-hint"></p>
+      <div class="dialog-actions">
+        <button class="btn btn-ghost" value="cancel" type="submit">取消</button>
+        <button class="btn btn-primary" value="save" type="submit">保存并重载</button>
+      </div>
+    </form>
+  </dialog>
+
+  <script src="./config.js"></script>
+  <script src="./app.js"></script>
+</body>
+</html>
