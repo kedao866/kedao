@@ -19,8 +19,9 @@ services:
         value: "300"
       - key: MAX_DURATION_MIN
         value: "90"
+      # 免费实例只有 512MB 内存，同时只跑一个下载，避免 ffmpeg 合并时 OOM
       - key: MAX_ACTIVE_DOWNLOADS
-        value: "2"
+        value: "1"
       - key: JOB_TTL_MIN
         value: "60"
       - key: PROBE_LIMIT
