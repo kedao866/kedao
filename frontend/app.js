@@ -100,6 +100,20 @@
       state.api = cleanBase(CFG.apiBase);
       return;
     }
+    const params = new URLSearchParams(location.search);
+    const fromQuery = cleanBase(params.get("api") || "");
+    if (/^https?:\/\//i.test(fromQuery)) {
+      localStorage.setItem("kedao_api", fromQuery);
+      params.delete("api");
+      const rest = params.toString();
+      history.replaceState(
+        null,
+        "",
+        `${location.pathname}${rest ? `?${rest}` : ""}${location.hash}`
+      );
+      state.api = fromQuery;
+      return;
+    }
     const stored = localStorage.getItem("kedao_api");
     if (stored) {
       state.api = cleanBase(stored);

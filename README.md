@@ -5,6 +5,16 @@
 - 在线版：GitHub Pages（页面）+ Render（解析与下载后端）
 - 桌面版：单文件 `kedao.exe`，绿色免安装，通过 GitHub Release 分发
 
+## 在线地址
+
+- 页面：https://kedao866.github.io/kedao/
+- 代码：https://github.com/kedao866/kedao
+- Windows 版：https://github.com/kedao866/kedao/releases/latest
+
+页面部署在 GitHub Pages；视频解析与下载需要 Render 后端。部署好后端后，打开
+`https://kedao866.github.io/kedao/?api=https://你的后端地址`，地址会保存到本地，
+也可以在页脚“连接设置”里修改。
+
 ## 为什么不是纯 GitHub Pages
 
 GitHub Pages 只能托管静态文件，不能运行 yt-dlp、ffmpeg，也不能代理视频流。因此拆成两部分：
