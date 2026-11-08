@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: kedao-api
+    name: kedao-866-api
     runtime: docker
     plan: free
     region: singapore

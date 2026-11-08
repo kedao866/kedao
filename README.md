@@ -11,9 +11,10 @@
 - 代码：https://github.com/kedao866/kedao
 - Windows 版：https://github.com/kedao866/kedao/releases/latest
 
-页面部署在 GitHub Pages；视频解析与下载需要 Render 后端。部署好后端后，打开
-`https://kedao866.github.io/kedao/?api=https://你的后端地址`，地址会保存到本地，
-也可以在页脚“连接设置”里修改。
+页面部署在 GitHub Pages；视频解析与下载由 Render 后端
+`https://kedao-866-api.onrender.com` 提供。如果服务名被占用，Render 会生成另一个
+地址，届时打开 `https://kedao866.github.io/kedao/?api=https://你的后端地址`
+即可保存新地址，也可以在页脚“连接设置”里修改。
 
 ## 为什么不是纯 GitHub Pages
 
