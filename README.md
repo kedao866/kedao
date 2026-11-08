@@ -86,6 +86,8 @@ git push -u origin main
 
 ### 2. 部署后端（Render，免费）
 
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/kedao866/kedao)
+
 1. 打开 https://render.com 用 GitHub 登录。
 2. New → Blueprint，选择 `kedao` 仓库，Render 会读取 `render.yaml`。
 3. 确认服务名与区域（默认新加坡），点击 Apply，等待首次构建（约 3–8 分钟）。
@@ -94,29 +96,15 @@ git push -u origin main
 
 免费实例 15 分钟无请求会休眠，下一次访问需要约 30–60 秒唤醒；页面已经有相应提示。
 
-### 2b. 部署后端（Hugging Face Space，免费、无需信用卡）
+### 2b. 部署后端（Hugging Face Space，可选，需 PRO）
 
-Hugging Face 的免费 Docker Space 提供 2 vCPU / 16GB 内存，适合这个后端。项目里已经准备好独立上传包 `hf-space/`（Dockerfile、README、backend、frontend）。
+Hugging Face 现在只对 PRO 账户开放免费的 Docker / Gradio Space（静态 Space 仍免费），免费账户创建时会返回 `402 Payment Required`。如果已有 PRO，项目里已经准备好上传包 `hf-space/`（Dockerfile、README、backend、frontend）：
 
-1. 注册并登录 https://huggingface.co 。
-2. 打开 https://huggingface.co/new-space ：
-   - Space name 填 `kedao-api`
-   - SDK 选 **Docker** → **Blank**
-   - Hardware 选 **CPU basic · FREE**
-   - 可见性选 **Public**
-3. 进入 Space 的 **Files** 页，把 `hf-space/` 里的 `Dockerfile`、`README.md`、`backend/`、`frontend/` 上传（拖拽文件夹即可），提交后自动构建，约 3–8 分钟。
-4. 构建完成后，Space 页面上的 **App** 就是后端地址，形如：
+1. 打开 https://huggingface.co/new-space ，SDK 选 **Docker → Blank**，Hardware 选 **CPU basic**，可见性选 **Public**，名称填 `kedao-api`。
+2. 进入 Space 的 **Files** 页，上传 `hf-space/` 里的 `Dockerfile`、`README.md`、`backend/`、`frontend/`，提交后自动构建。
+3. 后端地址形如 `https://<HF用户名>-kedao-api.hf.space`，`/api/health` 应返回 `"ok": true`。
 
-   ```
-   https://<你的HF用户名>-kedao-api.hf.space
-   ```
-
-   访问 `https://<你的HF用户名>-kedao-api.hf.space/api/health`，应返回 `"ok": true`。
-5. 打开 `https://kedao866.github.io/kedao/?api=https://<你的HF用户名>-kedao-api.hf.space`，页面会记住这个地址。
-
-Space 空闲约 48 小时后休眠，首次访问需要唤醒；免费磁盘是临时的，重启后任务文件会清空。
-
-更新后端代码时，先在本机运行 `hf-space/sync.sh` 同步 `backend/`、`frontend/`，再把改动上传到 Space 并点 **Factory rebuild**。
+没有 PRO 就用上面的 Render 免费方案。更新后端代码时，先运行 `hf-space/sync.sh` 同步副本，再上传并点 **Factory rebuild**。
 
 ### 3. 发布前端（GitHub Pages）
 
